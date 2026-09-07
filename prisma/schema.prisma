@@ -1,0 +1,27 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String      @id @default(uuid())
+  username  String      @unique
+  password  String
+  createdAt DateTime    @default(now())
+  watchlist Watchlist[]
+}
+
+model Watchlist {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  movieId     Int
+  title       String
+  posterPath  String
+  voteAverage Float
+  addedAt     DateTime @default(now())
+}
