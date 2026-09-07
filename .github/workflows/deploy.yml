@@ -101,18 +101,31 @@ jobs:
         run: flutter pub get
 
       - name: Build iOS App (No Codesign)
-        run: flutter build ios --release --no-codesign
+        run: |
+          flutter build ios --release --no-codesign --config-only
+          cd ios
+          xcodebuild -workspace Runner.xcworkspace \
+            -scheme Runner \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath ../build/ios/derivedData \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            DEVELOPMENT_TEAM="" \
+            PROVISIONING_PROFILE_SPECIFIER="" \
+            -quiet
 
       - name: Create Unsigned IPA
         run: |
-          cd build/ios/iphoneos
+          cd build/ios/derivedData/Build/Products/Release-iphoneos
           mkdir -p Payload
-          mv Runner.app Payload/
-          zip -r iOS-Runner-Unsigned.ipa Payload
+          cp -r Runner.app Payload/
+          zip -r ../../../../../iOS-Runner-Unsigned.ipa Payload
 
       - name: Upload iOS IPA Artifact
         uses: actions/upload-artifact@v4
         with:
           name: ios-release-ipa
-          path: build/ios/iphoneos/iOS-Runner-Unsigned.ipa
+          path: build/iOS-Runner-Unsigned.ipa
           retention-days: 30
