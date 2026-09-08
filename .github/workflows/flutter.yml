@@ -56,7 +56,7 @@ jobs:
         run: flutter test
 
       - name: Build Web app
-        run: flutter build web --release
+        run: flutter build web --release --no-tree-shake-icons
 
       - name: Build Android APK
-        run: flutter build apk --release
+        run: flutter build apk --release --no-tree-shake-icons
