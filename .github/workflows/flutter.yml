@@ -26,8 +26,25 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Create .env file from .env.example
-        run: cp .env.example .env
+      - name: Create .env file from secrets
+        run: |
+          cat <<EOF > .env
+          NEON_HOST=${{ secrets.NEON_HOST }}
+          NEON_DATABASE=${{ secrets.NEON_DATABASE }}
+          NEON_USERNAME=${{ secrets.NEON_USERNAME }}
+          NEON_PASSWORD=${{ secrets.NEON_PASSWORD }}
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID }}
+          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=${{ secrets.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET }}
+          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }}
+          NEXT_PUBLIC_FIREBASE_APP_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }}
+          NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID }}
+          CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}
+          TMDB_ACCESS_TOKEN=${{ secrets.TMDB_ACCESS_TOKEN }}
+          TMDB_API_KEY=${{ secrets.TMDB_API_KEY }}
+          WYZIE_API_KEY=${{ secrets.WYZIE_API_KEY }}
+          EOF
 
       - name: Install dependencies
         run: flutter pub get
