@@ -34,11 +34,11 @@ class GravityBackgroundWidget extends StatefulWidget {
   final int tabIndex;
 
   const GravityBackgroundWidget({
-    Key? key,
+    super.key,
     required this.child,
     required this.settings,
     this.tabIndex = 0,
-  }) : super(key: key);
+  });
 
   @override
   State<GravityBackgroundWidget> createState() => _GravityBackgroundWidgetState();
@@ -246,17 +246,17 @@ class GalaxyPainter extends CustomPainter {
     final pulseScale = 1.0 + sin(time * pi * 2) * 0.12 + (burstValue * 0.35);
     final coreGlowRadius = maxRadius * 0.8 * pulseScale;
 
-    final auroraColorsDark = [
-      const Color(0xFF06B6D4).withValues(alpha: 0.35), // Cyan
-      const Color(0xFF8B5CF6).withValues(alpha: 0.25), // Violet
-      const Color(0xFFEC4899).withValues(alpha: 0.15), // Pink
+    const auroraColorsDark = [
+      Color(0x5906B6D4), // Cyan
+      Color(0x408B5CF6), // Violet
+      Color(0x26EC4899), // Pink
       Colors.transparent,
     ];
 
-    final auroraColorsLight = [
-      const Color(0xFF3B82F6).withValues(alpha: 0.22), // Blue
-      const Color(0xFF8B5CF6).withValues(alpha: 0.16), // Violet
-      const Color(0xFF06B6D4).withValues(alpha: 0.10), // Cyan
+    const auroraColorsLight = [
+      Color(0x383B82F6), // Blue
+      Color(0x298B5CF6), // Violet
+      Color(0x1A06B6D4), // Cyan
       Colors.transparent,
     ];
 

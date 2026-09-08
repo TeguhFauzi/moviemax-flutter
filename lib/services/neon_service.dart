@@ -6,8 +6,6 @@ import 'package:http/http.dart' as http;
 class NeonService {
   // Use Neon SQL HTTP Endpoint / REST / Serverless DB proxy
   static String get _host => dotenv.env['NEON_HOST'] ?? '';
-  static String get _databaseName => dotenv.env['NEON_DATABASE'] ?? '';
-  static String get _username => dotenv.env['NEON_USERNAME'] ?? '';
   static String get _password => dotenv.env['NEON_PASSWORD'] ?? '';
 
   static Future<Map<String, dynamic>?> authenticateUser(String nameOrEmail, String password) async {
