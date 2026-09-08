@@ -1,39 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'config/env_config.dart';
-import 'providers/movie_provider.dart';
-import 'providers/auth_provider.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'providers/budget_provider.dart';
 import 'providers/settings_provider.dart';
-import 'providers/call_provider.dart';
-import 'providers/chat_provider.dart';
-import 'widgets/push_notification_banner.dart';
-import 'views/login_screen.dart';
+import 'providers/auth_provider.dart';
 import 'views/home_screen.dart';
+import 'views/login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await EnvConfig.init();
-  runApp(const MovieMaxApp());
+  try {
+    await dotenv.load(fileName: ".env");
+  } catch (e) {
+    debugPrint("Failed to load .env file: $e");
+  }
+  await initializeDateFormatting('id_ID', null);
+  await initializeDateFormatting('en_US', null);
+  runApp(const BudgetApp());
 }
 
-class MovieMaxApp extends StatelessWidget {
-  const MovieMaxApp({Key? key}) : super(key: key);
+class BudgetApp extends StatelessWidget {
+  const BudgetApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => SettingsProvider()),
-        ChangeNotifierProvider(create: (_) => MovieProvider()..fetchHomeData()),
+        ChangeNotifierProvider(create: (_) => SettingsProvider()..init()),
+        ChangeNotifierProvider(create: (_) => BudgetProvider()..init()),
         ChangeNotifierProvider(create: (_) => AuthProvider()..initSession()),
-        ChangeNotifierProvider(create: (_) => CallProvider()),
-        ChangeNotifierProvider(create: (_) => ChatProvider()),
       ],
       child: Consumer2<SettingsProvider, AuthProvider>(
         builder: (context, settings, auth, child) {
           final isDark = settings.isDarkMode;
 
+          // Show loading while checking session
           if (auth.isCheckingSession) {
             return MaterialApp(
               debugShowCheckedModeBanner: false,
@@ -47,25 +50,19 @@ class MovieMaxApp extends StatelessWidget {
             );
           }
 
-          if (auth.isLoggedIn) {
-            Provider.of<ChatProvider>(context, listen: false).init(auth.userName);
-            Provider.of<CallProvider>(context, listen: false).bind(auth.userName);
-          }
-
           return MaterialApp(
-            title: 'MovieMAX Mobile',
+            title: 'Budget Manager',
             debugShowCheckedModeBanner: false,
-            navigatorKey: appNavigatorKey,
             themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
             theme: ThemeData(
               brightness: Brightness.light,
               scaffoldBackgroundColor: const Color(0xFFF8FAFC),
-              primaryColor: const Color(0xFF4F46E5),
+              primaryColor: const Color(0xFF6366F1),
               useMaterial3: true,
               textTheme: GoogleFonts.interTextTheme(ThemeData.light().textTheme),
               colorScheme: const ColorScheme.light(
-                primary: Color(0xFF4F46E5),
-                secondary: Color(0xFF059669),
+                primary: Color(0xFF6366F1),
+                secondary: Color(0xFF10B981),
                 surface: Color(0xFFFFFFFF),
               ),
             ),
@@ -81,11 +78,6 @@ class MovieMaxApp extends StatelessWidget {
                 surface: Color(0xFF1E293B),
               ),
             ),
-            builder: (context, child) {
-              return GlobalNotificationOverlay(
-                child: child ?? const SizedBox.shrink(),
-              );
-            },
             home: auth.isLoggedIn ? const HomeScreen() : const LoginScreen(),
           );
         },
@@ -93,4 +85,3 @@ class MovieMaxApp extends StatelessWidget {
     );
   }
 }
-

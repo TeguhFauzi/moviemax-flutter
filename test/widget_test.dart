@@ -1,17 +1,24 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:moviemax_flutter/main.dart';
+import 'package:budget_manager/models/transaction_model.dart';
 
 void main() {
-  testWidgets('MovieMaxApp builds properly', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MovieMaxApp());
+  test('TransactionModel toMap/fromMap roundtrip', () {
+    final txn = TransactionModel(
+      id: 'test-1',
+      title: 'Makan Siang',
+      amount: 25000,
+      type: TransactionType.expense,
+      categoryId: 'food',
+      date: DateTime(2026, 1, 15),
+    );
+
+    final map = txn.toMap();
+    final restored = TransactionModel.fromMap(map);
+
+    expect(restored.id, txn.id);
+    expect(restored.title, txn.title);
+    expect(restored.amount, txn.amount);
+    expect(restored.type, txn.type);
+    expect(restored.categoryId, txn.categoryId);
   });
 }
