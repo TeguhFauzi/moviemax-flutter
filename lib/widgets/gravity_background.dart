@@ -220,23 +220,23 @@ class GalaxyPainter extends CustomPainter {
     // Rich Creative Gradient Background
     final bgPaint = Paint();
     if (isDarkMode) {
-      bgPaint.shader = RadialGradient(
-        center: const Alignment(0, -0.2),
+      bgPaint.shader = const RadialGradient(
+        center: Alignment(0, -0.2),
         radius: 1.6,
         colors: [
-          const Color(0xFF1E1B4B), // Deep Indigo
-          const Color(0xFF0F172A), // Dark Slate
-          const Color(0xFF030712), // Cosmic Black
+          Color(0xFF1E1B4B), // Deep Indigo
+          Color(0xFF0F172A), // Dark Slate
+          Color(0xFF030712), // Cosmic Black
         ],
       ).createShader(rect);
     } else {
-      bgPaint.shader = RadialGradient(
-        center: const Alignment(0, -0.2),
+      bgPaint.shader = const RadialGradient(
+        center: Alignment(0, -0.2),
         radius: 1.6,
         colors: [
-          const Color(0xFFF0F3FF), // Soft Crystal Blue
-          const Color(0xFFF8FAFC), // Slate White
-          const Color(0xFFE0E7FF), // Subtle Periwinkle
+          Color(0xFFF0F3FF), // Soft Crystal Blue
+          Color(0xFFF8FAFC), // Slate White
+          Color(0xFFE0E7FF), // Subtle Periwinkle
         ],
       ).createShader(rect);
     }
